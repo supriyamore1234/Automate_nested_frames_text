@@ -18,8 +18,8 @@ public class App {
         // tests.testCase03();
         // tests.testCase04();// link countwith name
         // tests.testCase05();
-        tests.testCase06();
-        // tests.testCase07();
+        // tests.testCase06();
+        tests.testCase07();
         // tests.testCase08();/Alert
         // tests.testCase09();
         // tests.testCase10();

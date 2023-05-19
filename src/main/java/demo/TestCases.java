@@ -49,23 +49,74 @@ public class TestCases {
 
     }
 
-    public void testCase06() {
-        driver.get("https://the-internet.herokuapp.com/nested_frames");
-        driver.switchTo().frame("frame-top");
-        driver.switchTo().frame("frame-left");
-        WebElement leftframe = driver.findElement(By.xpath("//body"));
-        System.out.println("Print left frame : " + leftframe.getText());
-        driver.switchTo().parentFrame();
-        driver.switchTo().frame("frame-middle");
-        WebElement middleframe = driver.findElement(By.tagName("body"));
-        System.out.println("Print middle frame name : " + middleframe.getText());
-        driver.switchTo().parentFrame();
-        driver.switchTo().frame("frame-right");
-        WebElement rightframe = driver.findElement(By.tagName("body"));
-        System.out.println("Print Right frame : " + rightframe);
-        driver.switchTo().defaultContent();
-        driver.switchTo().frame("frame-bottom");
-        WebElement bottomframe = driver.findElement(By.tagName("body"));
-        System.out.println("Print botto frame : " + bottomframe.getText());
+    // post image on linkdin
+    public void testCase07() throws InterruptedException, AWTException {
+        driver.get("https://www.linkedin.com/feed/");
+        // click on sign in Using Locator "XPath" //a[contains(@Class,'nav__button-s')]
+
+        WebElement signin = driver
+                .findElement(By.xpath("//a[contains(text(),'Sign in')]"));
+        signin.click();
+        // Enter email
+        WebElement email = driver.findElement(By.xpath("//input[@id='username' and @name='session_key']"));
+        email.sendKeys("moresupriyasunil@gmail.com");
+
+        // Enter pass word using xpath //input[@id='password' and @type='password']
+        WebElement password = driver.findElement(By.xpath("//input[@id='password' and @type='password']"));
+        password.sendKeys("heemalaya12");
+        // click on sign in button[type="submit"] and click on it
+        WebElement sign = driver.findElement(By.cssSelector("button[type='submit']"));
+        sign.click();
+        // implicitly wait
+
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+
+        Thread.sleep(5000);
+        // click on post tab
+        WebElement testpost = driver
+                .findElement(By.xpath("//span[text()='Start a post']"));
+        testpost.click();
+        Thread.sleep(5000);
+        // find image path webelement
+        WebElement imagepath = driver.findElement(By.xpath("//button//following::span[text()='Add a photo'][1]"));
+        Actions act = new Actions(driver);
+        act.moveToElement(imagepath).click().perform();
+        // imagepath.click();
+        Thread.sleep(4000);
+
+        StringSelection s = new StringSelection("C:\\Users\\EXPERT\\Desktop\\download.png");
+        Thread.sleep(5000);
+        // use robot class to upload image
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(s, null);
+        Robot robot = new Robot(); // Robot class throws AWT Exception
+        robot.delay(250);
+        robot.keyPress(KeyEvent.VK_ENTER);
+        robot.keyRelease(KeyEvent.VK_ENTER);
+        robot.keyPress(KeyEvent.VK_CONTROL);
+        robot.keyPress(KeyEvent.VK_V);
+        robot.keyRelease(KeyEvent.VK_V);
+        robot.keyRelease(KeyEvent.VK_CONTROL);
+        robot.keyPress(KeyEvent.VK_ENTER);
+        robot.delay(150);
+        robot.keyRelease(KeyEvent.VK_ENTER);
+        Thread.sleep(3000);
+        // click o done
+        WebElement ToDone = driver
+                .findElement(By.xpath("//span[text()='Done']"));
+        act.moveToElement(ToDone).click().perform();
+        Thread.sleep(5000);
+        // click on post
+        WebElement ToPost = driver
+                .findElement(By.xpath("//span[text()='Post']"));
+        act.moveToElement(ToPost).click().perform();
+        // verify image is posted successfully or not
+        WebElement message = driver
+                .findElement(By.cssSelector("p[class*='artdeco-toast-item__message'][role='alert']"));
+        boolean status = message.isDisplayed();
+        if (status == true) {
+            System.out.println("Post is posted successfully");
+        } else {
+            System.out.println("Not posted successfully");
+        }
     }
 }
